@@ -6,15 +6,16 @@ import {
   TableRow,
   Tooltip,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { deleteTodo, Todo, toggleComplete } from "../features/todos/todoSlice";
+import { useDeleteTodoMutation } from "./hooks/useDeleteTodoMutation";
+import { useCompleteTodoMutation } from "./hooks/useCompleteTodoMutation";
 
 interface TodoItemProp {
-  todo: Todo;
+  todo: any;
   handleOpenDialog: (id: string) => void;
 }
 const TableRowItem = ({ todo, handleOpenDialog }: TodoItemProp) => {
-  const dispatch = useDispatch();
+  const { mutate: deleteTodo } = useDeleteTodoMutation();
+  const { mutate: completeTodo } = useCompleteTodoMutation();
   return (
     <TableRow
       key={todo.id}
@@ -24,7 +25,9 @@ const TableRowItem = ({ todo, handleOpenDialog }: TodoItemProp) => {
         <Checkbox
           color="primary"
           checked={todo.completed}
-          onChange={() => dispatch(toggleComplete(todo.id))}
+          onChange={() =>
+            completeTodo({ id: todo.id, completed: !todo.completed })
+          }
           inputProps={{
             "aria-label": "select all desserts",
           }}
@@ -39,7 +42,7 @@ const TableRowItem = ({ todo, handleOpenDialog }: TodoItemProp) => {
         {todo.voiceNote && <audio controls src={todo.voiceNote} />}
       </TableCell>
       <TableCell align="center">
-        <IconButton onClick={() => dispatch(deleteTodo(todo.id))}>
+        <IconButton onClick={() => deleteTodo(todo.id)}>
           <Delete color="error" />
         </IconButton>
         <Tooltip title={todo.completed ? "Cannot edit completed item" : "Edit"}>

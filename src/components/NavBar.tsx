@@ -5,9 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { AppDispatch, RootState } from "../store";
-import { useDispatch, useSelector } from "react-redux";
-import { setSearchTerm } from "../features/todos/todoSlice";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -49,13 +47,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function NavBar() {
-  const dispatch = useDispatch<AppDispatch>();
-  const searchTerm = useSelector((state: RootState) => state.todos.searchTerm);
+interface NavBarProps {
+  searchTerm: string;
+  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+}
 
+export default function NavBar({ searchTerm, setSearchTerm }: NavBarProps) {
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchTerm(event.target.value));
+    setSearchTerm(event.target.value);
   };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ borderRadius: "10px" }}>
