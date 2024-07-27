@@ -34,7 +34,7 @@ const AddTodoForm = () => {
         </Typography>
         <Typography>
           <Button variant="contained" color="primary" onClick={handleOpen}>
-            Add New Items
+            Add New Todo
           </Button>
         </Typography>
       </Box>

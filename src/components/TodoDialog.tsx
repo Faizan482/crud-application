@@ -10,17 +10,18 @@ import {
 import MicIcon from "@mui/icons-material/Mic";
 import MicOffIcon from "@mui/icons-material/MicOff";
 import React, { useEffect, useRef, useState } from "react";
-import { addTodo, updateTodo } from "../features/todos/todoSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
+import { useAddTodoMutation } from "./hooks/useAddTodoMutation";
+import { useUpdateTodoMutation } from "./hooks/useUpdateTodoMutation";
+import { useGetTodosQuery } from "./hooks/useGetTodosQuery";
 interface todoDialogProps {
   open: boolean;
   handleClose: () => void;
   id?: string;
 }
 const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
-  const todos = useSelector((state: RootState) => state.todos.todos);
-  console.log(todos, "in dailog");
+  const { data: todos, isLoading } = useGetTodosQuery();
+  const { mutate: addTodo } = useAddTodoMutation();
+  const { mutate: updateTodo } = useUpdateTodoMutation();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isRecording, setIsRecording] = useState(false);
@@ -30,21 +31,17 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
   const audioChunksRef = useRef<Blob[]>([]);
   const intervalRef = useRef<number | null>(null);
 
-  const dispatch = useDispatch();
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (id) {
-      dispatch(updateTodo({ title, description, id }));
+      updateTodo({ id, title, description });
     } else {
-      dispatch(
-        addTodo({
-          title,
-          description,
-          completed: false,
-          voiceNote: audioURL,
-        })
-      );
+      addTodo({
+        title,
+        description,
+        completed: false,
+        voiceNote: audioURL,
+      });
     }
     setTitle("");
     setDescription("");
@@ -88,14 +85,14 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
   };
 
   useEffect(() => {
-    if (id && open) {
-      const findTodo = todos.find((todo) => todo?.id === id);
+    if (id && open && todos) {
+      const findTodo = todos.find((todo: any) => todo?.id === id);
       if (findTodo) {
         setTitle(findTodo?.title);
         setDescription(findTodo?.description);
       }
     }
-  }, [open]);
+  }, [open, id, todos]);
 
   useEffect(() => {
     if (isRecording) {
@@ -115,6 +112,9 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
       }
     };
   }, [isRecording]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <Dialog
       open={open}

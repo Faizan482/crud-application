@@ -9,27 +9,39 @@ import {
   Typography,
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
-import { useSelector } from "react-redux";
-// import { RootState } from "../store";
 import TableRowItem from "./TableRowItem";
 import TodoDialog from "./TodoDialog";
 import { useState } from "react";
 import { blue } from "@mui/material/colors";
-import { selectFilteredTodos } from "../features/todos/todoSlice";
-const TodoList = () => {
-  // const todos = useSelector((state: RootState) => state.todos.todos);
-  const todos = useSelector(selectFilteredTodos);
-  console.log(todos, "todoitemsssssssss");
+import { useGetTodosQuery } from "./hooks/useGetTodosQuery";
+
+interface TodoListProps {
+  searchTerm: string;
+}
+
+const TodoList = ({ searchTerm }: TodoListProps) => {
+  const { data: todos = [] } = useGetTodosQuery();
   const [open, setOpen] = useState(false);
   const [editId, setEditId] = useState("");
+
   const handleOpenDialog = (id: string) => {
     setOpen(true);
     setEditId(id);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   const bgColor = blue[700];
+
+  // Filter todos based on the search term
+  const filteredTodos = todos.filter(
+    (todo: any) =>
+      todo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      todo.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -64,7 +76,7 @@ const TodoList = () => {
                   fontSize: "17px",
                 }}
               >
-                Discription
+                Description
               </TableCell>
               <TableCell
                 sx={{
@@ -90,7 +102,7 @@ const TodoList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {todos.length === 0 ? (
+            {filteredTodos.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} align="center">
                   <Typography
@@ -108,7 +120,7 @@ const TodoList = () => {
                 </TableCell>
               </TableRow>
             ) : (
-              todos.map((todo) => (
+              filteredTodos.map((todo: any) => (
                 <TableRowItem
                   key={todo.id}
                   todo={todo}
