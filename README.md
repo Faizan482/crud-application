@@ -31,3 +31,6 @@ cd your-folder-name
 npm i
 npm run app
 ```
+## Deployed link: https://todo-application-3cfd8.web.app/
+
+The deployed link is working for the frontend only as backend server is not deployed. When you open the deployed link, you can start the backend locally by typing npm run app.
