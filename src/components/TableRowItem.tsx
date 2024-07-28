@@ -8,9 +8,15 @@ import {
 } from "@mui/material";
 import { useDeleteTodoMutation } from "./hooks/useDeleteTodoMutation";
 import { useCompleteTodoMutation } from "./hooks/useCompleteTodoMutation";
-
+interface SingleTodo {
+  id: string;
+  title: string;
+  description: string;
+  voiceNote: string;
+  completed: boolean;
+}
 interface TodoItemProp {
-  todo: any;
+  todo: SingleTodo;
   handleOpenDialog: (id: string) => void;
 }
 const TableRowItem = ({ todo, handleOpenDialog }: TodoItemProp) => {
@@ -23,7 +29,7 @@ const TableRowItem = ({ todo, handleOpenDialog }: TodoItemProp) => {
     >
       <TableCell padding="checkbox">
         <Checkbox
-          color="primary"
+          color="secondary"
           checked={todo.completed}
           onChange={() =>
             completeTodo({ id: todo.id, completed: !todo.completed })
@@ -50,9 +56,7 @@ const TableRowItem = ({ todo, handleOpenDialog }: TodoItemProp) => {
             <IconButton
               onClick={() => handleOpenDialog(todo.id)}
               disabled={todo.completed}
-              sx={{
-                color: todo.completed ? "lightgray" : "blue",
-              }}
+              color={todo.completed ? "secondary" : "primary"}
             >
               <Edit />
             </IconButton>

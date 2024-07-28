@@ -20,20 +20,11 @@ const AddTodoForm = () => {
           borderBottom: "1px solid gray",
         }}
       >
-        <Typography
-          variant="h6"
-          noWrap
-          component="div"
-          sx={{
-            fontSize: "18px",
-            fontWeight: "bold",
-            fontFamily: "sans-serif",
-          }}
-        >
+        <Typography variant="h6" noWrap>
           List Of Items
         </Typography>
         <Typography>
-          <Button variant="contained" color="primary" onClick={handleOpen}>
+          <Button variant="contained" color="secondary" onClick={handleOpen}>
             Add New Todo
           </Button>
         </Typography>

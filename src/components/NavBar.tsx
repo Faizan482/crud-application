@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 
-const Search = styled("div")(({ theme }) => ({
+const Search = styled(Box)(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -59,7 +59,7 @@ export default function NavBar({ searchTerm, setSearchTerm }: NavBarProps) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ borderRadius: "10px" }}>
+      <AppBar color="secondary" position="static" sx={{ borderRadius: "10px" }}>
         <Toolbar>
           <Typography
             variant="h6"
