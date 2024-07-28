@@ -27,7 +27,7 @@ Todo App requires [Node.js](https://nodejs.org/) v18.17.0 to run.
 Install the dependencies and devDependencies and start the server.
 
 ```sh
-cd my-todo-app
+cd your-folder-name
 npm i
 npm run app
 ```
