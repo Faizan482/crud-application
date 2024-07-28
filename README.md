@@ -34,3 +34,15 @@ npm run app
 ## Deployed link: https://todo-application-3cfd8.web.app/
 
 The deployed link is working for the frontend only as backend server is not deployed. When you open the deployed link, you can start the backend locally by typing npm run app.
+or 
+create db.json file any where in sytem 
+```sh
+// db.json
+{
+  "todos": [ ]
+}
+```
+```sh npx json-server db.json ```
+Note:
+if you run server by npm run app please first kill that server to run local db.json
+
