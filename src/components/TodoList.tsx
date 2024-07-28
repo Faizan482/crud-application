@@ -12,15 +12,22 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import TableRowItem from "./TableRowItem";
 import TodoDialog from "./TodoDialog";
 import { useState } from "react";
-import { blue } from "@mui/material/colors";
 import { useGetTodosQuery } from "./hooks/useGetTodosQuery";
 
 interface TodoListProps {
   searchTerm: string;
 }
 
+interface SingleTodo {
+  id: string;
+  title: string;
+  description: string;
+  voiceNote: string;
+  completed: boolean;
+}
 const TodoList = ({ searchTerm }: TodoListProps) => {
   const { data: todos = [] } = useGetTodosQuery();
+
   const [open, setOpen] = useState(false);
   const [editId, setEditId] = useState("");
 
@@ -33,11 +40,9 @@ const TodoList = ({ searchTerm }: TodoListProps) => {
     setOpen(false);
   };
 
-  const bgColor = blue[700];
-
   // Filter todos based on the search term
   const filteredTodos = todos.filter(
-    (todo: any) =>
+    (todo: SingleTodo) =>
       todo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       todo.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -46,57 +51,13 @@ const TodoList = ({ searchTerm }: TodoListProps) => {
     <>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead style={{ backgroundColor: bgColor }}>
+          <TableHead sx={{ backgroundColor: "secondary.main" }}>
             <TableRow>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  color: "white",
-                  fontFamily: "monospace",
-                  fontSize: "17px",
-                }}
-              >
-                Completed
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  color: "white",
-                  fontFamily: "monospace",
-                  fontSize: "17px",
-                }}
-              >
-                Title
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  color: "white",
-                  fontFamily: "monospace",
-                  fontSize: "17px",
-                }}
-              >
-                Description
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontWeight: "bold",
-                  color: "white",
-                  fontFamily: "monospace",
-                  fontSize: "17px",
-                }}
-              >
-                Audio
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{
-                  fontWeight: "bold",
-                  color: "white",
-                  fontFamily: "monospace",
-                  fontSize: "17px",
-                }}
-              >
+              <TableCell sx={{ color: "white" }}>Completed</TableCell>
+              <TableCell sx={{ color: "white" }}>Title</TableCell>
+              <TableCell sx={{ color: "white" }}>Description</TableCell>
+              <TableCell sx={{ color: "white" }}>Audio</TableCell>
+              <TableCell sx={{ color: "white" }} align="center">
                 Actions
               </TableCell>
             </TableRow>
@@ -111,16 +72,15 @@ const TodoList = ({ searchTerm }: TodoListProps) => {
                       display: "flex",
                       justifyContent: "center",
                       paddingY: "12px",
-                      fontFamily: "sans-serif ",
                     }}
                   >
-                    List of items is empty now
+                    No Data Found
                     <DescriptionIcon sx={{ paddingTop: "5px" }} />
                   </Typography>
                 </TableCell>
               </TableRow>
             ) : (
-              filteredTodos.map((todo: any) => (
+              filteredTodos.map((todo: SingleTodo) => (
                 <TableRowItem
                   key={todo.id}
                   todo={todo}

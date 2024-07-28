@@ -12,14 +12,15 @@ import MicOffIcon from "@mui/icons-material/MicOff";
 import React, { useEffect, useRef, useState } from "react";
 import { useAddTodoMutation } from "./hooks/useAddTodoMutation";
 import { useUpdateTodoMutation } from "./hooks/useUpdateTodoMutation";
-import { useGetTodosQuery } from "./hooks/useGetTodosQuery";
+import { useGetTodoById } from "./hooks/useGetTodoById";
 interface todoDialogProps {
   open: boolean;
   handleClose: () => void;
   id?: string;
 }
 const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
-  const { data: todos, isLoading } = useGetTodosQuery();
+  const { data: todo } = useGetTodoById(id);
+  console.log(todo, "data in by idHOook");
   const { mutate: addTodo } = useAddTodoMutation();
   const { mutate: updateTodo } = useUpdateTodoMutation();
   const [title, setTitle] = useState("");
@@ -34,7 +35,7 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (id) {
-      updateTodo({ id, title, description });
+      updateTodo({ id, title, description, voiceNote: audioURL });
     } else {
       addTodo({
         title,
@@ -85,14 +86,12 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
   };
 
   useEffect(() => {
-    if (id && open && todos) {
-      const findTodo = todos.find((todo: any) => todo?.id === id);
-      if (findTodo) {
-        setTitle(findTodo?.title);
-        setDescription(findTodo?.description);
-      }
+    if (id && open && todo) {
+      setTitle(todo?.title);
+      setDescription(todo?.description);
+      setAudioURL(todo?.voiceNote);
     }
-  }, [open, id, todos]);
+  }, [open, id, todo]);
 
   useEffect(() => {
     if (isRecording) {
@@ -112,9 +111,7 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
       }
     };
   }, [isRecording]);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+
   return (
     <Dialog
       open={open}
@@ -122,7 +119,9 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle>{id ? "Edit" : "Add"} Todo</DialogTitle>
+      <DialogTitle color="secondary.main">
+        {id ? "Edit" : "Add"} Todo
+      </DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <TextField
@@ -142,33 +141,30 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
             margin="normal"
           />
 
-          {!id && (
-            <>
-              <Typography variant="subtitle1" sx={{ paddingY: "4px" }}>
-                Do You Want To Record Something!!
-              </Typography>
-              {isRecording ? (
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={handleStopRecording}
-                >
-                  Stop Recording
-                  <MicOffIcon />
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="info"
-                  onClick={handleStartRecording}
-                >
-                  Start Recording
-                  <MicIcon />
-                </Button>
-              )}
-            </>
-          )}
-
+          <>
+            <Typography variant="subtitle1" sx={{ paddingY: "4px" }}>
+              Want To Record Something?
+            </Typography>
+            {isRecording ? (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleStopRecording}
+              >
+                Stop Recording
+                <MicOffIcon />
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleStartRecording}
+              >
+                Start Recording
+                <MicIcon />
+              </Button>
+            )}
+          </>
           {isRecording && <p>Recording Time: {formatTime(recordingTime)}</p>}
           <Box sx={{ paddingY: "10px" }}>
             {audioURL && <audio controls src={audioURL} />}
@@ -183,7 +179,7 @@ const TodoDialog = ({ open, handleClose, id }: todoDialogProps) => {
             <Button
               type="submit"
               variant="contained"
-              color="primary"
+              color="secondary"
               sx={{ width: "100%" }}
             >
               {id ? "Edit" : "Add"} Todo

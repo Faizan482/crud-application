@@ -1,32 +1,11 @@
 {
   "todos": [
     {
-      "id": "f728",
-      "title": "Admin-Dashboard-application",
-      "description": "Netflix",
-      "completed": false,
-      "voiceNote": "blob:http://localhost:5173/0f318dbb-e7e4-45e4-91eb-e5aaa732c58e"
-    },
-    {
-      "id": "a214",
-      "title": "i am software developer ",
-      "description": "degital marketer",
-      "completed": false,
-      "voiceNote": "blob:http://localhost:5173/0c4116d0-0d28-485b-8616-2533de81d39b"
-    },
-    {
-      "id": "032b",
+      "id": "a86a",
       "title": "i am software developer ",
       "description": "Python Engineer ",
       "completed": false,
-      "voiceNote": "blob:http://localhost:5173/9b4ce628-f761-4f52-9417-20ad8f877f4b"
-    },
-    {
-      "id": "a14a",
-      "title": "mern-estate",
-      "description": "mern",
-      "completed": false,
-      "voiceNote": "blob:http://localhost:5173/007fc483-d919-45f1-aaf8-60fa4543ed3d"
+      "voiceNote": "blob:http://localhost:5173/56e8b2bf-04cd-4d0e-8f92-721097c53874"
     }
   ]
 }
